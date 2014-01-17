@@ -23,5 +23,27 @@ namespace csWebSocketClient
         {
             InitializeComponent();
         }
+
+        private void tbx_selectAll(object sender, EventArgs e)
+        {
+            TextBox tbx = (TextBox)sender;
+            tbx.SelectAll();
+            tbx.Foreground = Brushes.Black;
+        }
+
+        private void tbx_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tbx = (TextBox)sender;
+            BrushConverter converter = new BrushConverter();
+            Brush brush = (Brush)converter.ConvertFromString("#FF999999");
+            tbx.Foreground = brush;
+        }
+
+        
+
+
+
+
+        
     }
 }

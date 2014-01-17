@@ -1,8 +1,11 @@
 ﻿<Window x:Class="csWebSocketClient.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+        Title="WebSocket Chat-Client" Height="550" Width="525">
+    <Grid Name="grid">
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="14,12,0,0" Name="tbx1" VerticalAlignment="Top" Width="479" Text="Host" IsEnabled="True" IsReadOnly="False" TextAlignment="Right" Foreground="#FF999999" PreviewMouseLeftButtonUp="tbx_selectAll" GotFocus="tbx_selectAll" LostFocus="tbx_LostFocus" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="12,41,0,0" Name="tbx2" VerticalAlignment="Top" Width="479" Text="Name" TextAlignment="Right" Foreground="#FF999999" PreviewMouseLeftButtonUp="tbx_selectAll" GotFocus="tbx_selectAll" LostFocus="tbx_LostFocus" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="12,476,0,0" Name="tbx3" VerticalAlignment="Top" Width="479" Text="Message" TextAlignment="Right" Foreground="#FF999999" PreviewMouseLeftButtonUp="tbx_selectAll" GotFocus="tbx_selectAll" LostFocus="tbx_LostFocus" />
+        <TextBox Height="399" HorizontalAlignment="Left" Margin="606,424,0,0" Name="tbx4" VerticalAlignment="Top" Width="479" />
     </Grid>
 </Window>
