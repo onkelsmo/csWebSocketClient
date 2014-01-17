@@ -32,6 +32,10 @@ namespace csWebSocketClient
             // TODO: validate the value
             this.ws = value;
         }
+        public WebSocket getWs()
+        {
+            return this.ws;
+        }
 
         // constructor
         public Connect(string hostEntry)
@@ -43,13 +47,14 @@ namespace csWebSocketClient
         // Methods
         private void establishConnection()
         {
-            if (this.uri == "")
+            if (this.uri == "Host")
             {
                 throw new Exception("No valid Hostname entered");
             }
             else
             {
                 this.setWs(new WebSocket(this.uri));
+                
             }
         }
     }

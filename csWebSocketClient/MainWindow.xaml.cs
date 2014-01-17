@@ -11,6 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using System.Reflection;
+using WebSocket4Net;
 
 namespace csWebSocketClient
 {
@@ -19,6 +22,9 @@ namespace csWebSocketClient
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Connect connect;
+        private WebSocket ws;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -43,21 +49,63 @@ namespace csWebSocketClient
         {
             try
             {
-                Connect connect = new Connect(tbxHost.Text);
-                tbxMessageWindow.AppendText("Connection established");                
+                this.connect = new Connect(tbxHost.Text);
+                this.ws = connect.getWs();
+                this.ws.Closed += new EventHandler(ws_Closed);
+                this.ws.Error += new EventHandler<SuperSocket.ClientEngine.ErrorEventArgs>(ws_Error);
+                this.ws.MessageReceived += new EventHandler<MessageReceivedEventArgs>(ws_MessageReceived);
+                this.ws.Opened += new EventHandler(ws_Opened);
+                this.ws.Open();
             }
             catch (Exception ex)
             {
-                tbxMessageWindow.AppendText("Error: \n");
+                tbxMessageWindow.AppendText("[Error]: \n");
                 tbxMessageWindow.AppendText(ex.Message + "\n");
             }
         }
 
-        
+        private void ws_Opened(object sender, EventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+            {
+                tbxMessageWindow.AppendText("[Connection established]\n");
+            }));
+        }
 
+        private void ws_MessageReceived(object sender, MessageReceivedEventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+            {
+                object message = SimpleJson.SimpleJson.DeserializeObject(e.Message);
+                
 
+                tbxMessageWindow.Text += e.Message + "\n";
+                tbxMessageWindow.ScrollToEnd();
+            }));
+        }
 
+        private void ws_Closed(object sender, EventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+            {
+                tbxMessageWindow.AppendText("[Connection closed]\n");
+            }));
+        }
 
-        
+        private void ws_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+            {
+                tbxMessageWindow.AppendText("[Error]: " + e.Exception.Message + "\n");
+            }));
+        }
+
+        private void sendMessage()
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+            {
+                this.ws.Send(tbxMessage.Text);
+            }));
+        }
     }
 }
