@@ -41,7 +41,16 @@ namespace csWebSocketClient
 
         private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
-            
+            try
+            {
+                Connect connect = new Connect(tbxHost.Text);
+                tbxMessageWindow.AppendText("Connection established");                
+            }
+            catch (Exception ex)
+            {
+                tbxMessageWindow.AppendText("Error: \n");
+                tbxMessageWindow.AppendText(ex.Message + "\n");
+            }
         }
 
         
