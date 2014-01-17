@@ -39,6 +39,11 @@ namespace csWebSocketClient
             tbx.Foreground = brush;
         }
 
+        private void btnConnect_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
         
 
 
