@@ -8,6 +8,6 @@
         <Button Content="Connect" Height="23" HorizontalAlignment="Right" Margin="0,9,14,0" Name="btnConnect" VerticalAlignment="Top" Width="75" Click="btnConnect_Click" />
         <TextBox Height="392" HorizontalAlignment="Left" Margin="12,47,0,0" Name="tbxMessageWindow" VerticalAlignment="Top" Width="477" IsReadOnly="True" Text="" VerticalContentAlignment="Bottom" FontWeight="Normal" DataContext="{Binding}" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="10,445,0,0" Name="tbxMessage" VerticalAlignment="Top" Width="398" Text="Message" TextAlignment="Right" Foreground="#FF999999" PreviewMouseLeftButtonUp="tbx_selectAll" GotFocus="tbx_selectAll" LostFocus="tbx_LostFocus" />
-        <Button Content="Send" Height="23" HorizontalAlignment="Right" Margin="0,445,14,0" Name="btnSend" VerticalAlignment="Top" Width="75" />
+        <Button Content="Send" Height="23" HorizontalAlignment="Right" Margin="0,445,14,0" Name="btnSend" VerticalAlignment="Top" Width="75" Click="btnSend_Click" />
     </Grid>
 </Window>

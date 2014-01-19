@@ -24,6 +24,7 @@ namespace csWebSocketClient
     {
         private Connect connect;
         private WebSocket ws;
+        private bool isConnected = false;
 
         public MainWindow()
         {
@@ -64,11 +65,17 @@ namespace csWebSocketClient
             }
         }
 
+        private void btnSend_Click(object sender, RoutedEventArgs e)
+        {
+            this.sendMessage();
+        }
+
         private void ws_Opened(object sender, EventArgs e)
         {
             this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
             {
                 tbxMessageWindow.AppendText("[Connection established]\n");
+                this.isConnected = true;
             }));
         }
 
@@ -78,7 +85,10 @@ namespace csWebSocketClient
             {
                 Message message = SimpleJson.SimpleJson.DeserializeObject<Message>(e.Message);
 
-                tbxMessageWindow.Text += message.message + "\n";
+                // TODO: check if message attributes are empty
+                tbxMessageWindow.Text += message.time + " ";
+                tbxMessageWindow.Text += message.name;
+                tbxMessageWindow.Text += ": " + message.message + "\n";
                 tbxMessageWindow.ScrollToEnd();
             }));
         }
@@ -103,7 +113,35 @@ namespace csWebSocketClient
         {
             this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
             {
-                this.ws.Send(tbxMessage.Text);
+                if (this.isConnected == false)
+                {
+                    MessageBox.Show("Please enter a Host first and click 'Connect'");
+                    return;
+                }
+                
+                if (tbxName.Text == "Name")
+                {
+                    MessageBox.Show("Please enter a Name first");
+                    return;
+                }
+                
+                if (tbxMessage.Text == "Message")
+                {
+                    MessageBox.Show("Please enter a Message first");
+                    return;
+                }
+
+                // 'type', 'message', 'time', 'name', color', 'clients'
+                Message message = new Message();
+                message.type = "usermsg";
+                message.message = tbxMessage.Text;
+                message.time = "";
+                message.name = tbxName.Text;
+                message.color = "";
+                                
+                string jsonString = SimpleJson.SimpleJson.SerializeObject(message);
+
+                this.ws.Send(jsonString);
             }));
         }
     }

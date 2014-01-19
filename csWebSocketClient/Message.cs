@@ -12,6 +12,7 @@ namespace csWebSocketClient
         public string type { get; set; }
         public string message { get; set; }
         public string time { get; set; }
+        public string name { get; set; }
         public string color { get; set; }
         //public string clients { get; set; }
     }
