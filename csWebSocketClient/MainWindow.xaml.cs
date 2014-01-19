@@ -76,10 +76,9 @@ namespace csWebSocketClient
         {
             this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
             {
-                object message = SimpleJson.SimpleJson.DeserializeObject(e.Message);
-                
+                Message message = SimpleJson.SimpleJson.DeserializeObject<Message>(e.Message);
 
-                tbxMessageWindow.Text += e.Message + "\n";
+                tbxMessageWindow.Text += message.message + "\n";
                 tbxMessageWindow.ScrollToEnd();
             }));
         }
