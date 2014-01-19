@@ -1,7 +1,7 @@
 csWebSocketClient
 =================
 
-just a simple websocket client in c#
+just a simple websocket client in c#. \n
 here you can find a php websocket server and javascript client
 https://github.com/onkelsmo/webSockets
 
