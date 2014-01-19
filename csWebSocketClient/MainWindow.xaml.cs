@@ -134,11 +134,16 @@ namespace csWebSocketClient
                 // 'type', 'message', 'time', 'name', color', 'clients'
                 DateTime time = DateTime.Now;
                 Message message = new Message();
+                string[] colorArray = new string[] {"007AFF", "FF7000", "FF7000", "15E25F", "CFC700", "CFC700", "CF1100", "CF00BE", "F00"};
+
+                Random r = new Random();
+                int id = r.Next(0, colorArray.Length);
+
                 message.type = "usermsg";
                 message.message = tbxMessage.Text;
                 message.time = time.ToLongTimeString();
                 message.name = tbxName.Text;
-                message.color = "";
+                message.color = colorArray[id];
                                 
                 string jsonString = SimpleJson.SimpleJson.SerializeObject(message);
 
