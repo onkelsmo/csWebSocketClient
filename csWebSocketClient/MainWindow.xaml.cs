@@ -132,10 +132,11 @@ namespace csWebSocketClient
                 }
 
                 // 'type', 'message', 'time', 'name', color', 'clients'
+                DateTime time = DateTime.Now;
                 Message message = new Message();
                 message.type = "usermsg";
                 message.message = tbxMessage.Text;
-                message.time = "";
+                message.time = time.ToLongTimeString();
                 message.name = tbxName.Text;
                 message.color = "";
                                 
