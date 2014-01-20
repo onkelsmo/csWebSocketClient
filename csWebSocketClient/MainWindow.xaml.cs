@@ -150,5 +150,29 @@ namespace csWebSocketClient
                 this.ws.Send(jsonString);
             }));
         }
+
+        private void tbxHost_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                this.sendMessage();
+            }
+        }
+
+        private void tbxName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                tbxHost.Focus();
+            }
+        }
+
+        private void tbxMessage_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                this.sendMessage();
+            }
+        }
     }
 }
