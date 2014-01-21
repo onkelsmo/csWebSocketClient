@@ -48,6 +48,55 @@ namespace csWebSocketClient
 
         private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
+            this.connectToHost();
+        }
+
+        private void btnSend_Click(object sender, RoutedEventArgs e)
+        {
+            this.sendMessage();
+        }
+
+        private void ws_Opened(object sender, EventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+            {
+                rtbxMessageWindow.AppendText("[Connection established]\n");
+                this.isConnected = true;
+            }));
+        }
+
+        private void ws_MessageReceived(object sender, MessageReceivedEventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+            {
+                Message message = SimpleJson.SimpleJson.DeserializeObject<Message>(e.Message);
+
+                // TODO: check if message attributes are empty
+                rtbxMessageWindow.AppendText(message.time + " ");
+                rtbxMessageWindow.AppendText(message.name);
+                rtbxMessageWindow.AppendText(": " + message.message + "\n");
+                rtbxMessageWindow.ScrollToEnd();
+            }));
+        }
+
+        private void ws_Closed(object sender, EventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+            {
+                rtbxMessageWindow.AppendText("[Connection closed]\n");
+            }));
+        }
+
+        private void ws_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+            {
+                rtbxMessageWindow.AppendText("[Error]: " + e.Exception.Message + "\n");
+            }));
+        }
+
+        private void connectToHost()
+        {
             try
             {
                 this.connect = new Connect(tbxHost.Text);
@@ -60,53 +109,9 @@ namespace csWebSocketClient
             }
             catch (Exception ex)
             {
-                tbxMessageWindow.AppendText("[Error]: \n");
-                tbxMessageWindow.AppendText(ex.Message + "\n");
+                rtbxMessageWindow.AppendText("[Error]: \n");
+                rtbxMessageWindow.AppendText(ex.Message + "\n");
             }
-        }
-
-        private void btnSend_Click(object sender, RoutedEventArgs e)
-        {
-            this.sendMessage();
-        }
-
-        private void ws_Opened(object sender, EventArgs e)
-        {
-            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
-            {
-                tbxMessageWindow.AppendText("[Connection established]\n");
-                this.isConnected = true;
-            }));
-        }
-
-        private void ws_MessageReceived(object sender, MessageReceivedEventArgs e)
-        {
-            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
-            {
-                Message message = SimpleJson.SimpleJson.DeserializeObject<Message>(e.Message);
-
-                // TODO: check if message attributes are empty
-                tbxMessageWindow.Text += message.time + " ";
-                tbxMessageWindow.Text += message.name;
-                tbxMessageWindow.Text += ": " + message.message + "\n";
-                tbxMessageWindow.ScrollToEnd();
-            }));
-        }
-
-        private void ws_Closed(object sender, EventArgs e)
-        {
-            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
-            {
-                tbxMessageWindow.AppendText("[Connection closed]\n");
-            }));
-        }
-
-        private void ws_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
-        {
-            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
-            {
-                tbxMessageWindow.AppendText("[Error]: " + e.Exception.Message + "\n");
-            }));
         }
 
         private void sendMessage()
@@ -151,7 +156,7 @@ namespace csWebSocketClient
             }));
         }
 
-        private void tbxHost_KeyDown(object sender, KeyEventArgs e)
+        private void tbxEnterPress(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
             {
@@ -167,11 +172,11 @@ namespace csWebSocketClient
             }
         }
 
-        private void tbxMessage_KeyDown(object sender, KeyEventArgs e)
+        private void tbxHost_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
             {
-                this.sendMessage();
+                this.connectToHost();
             }
         }
     }
