@@ -71,11 +71,31 @@ namespace csWebSocketClient
             {
                 Message message = SimpleJson.SimpleJson.DeserializeObject<Message>(e.Message);
 
+                switch (message.type)
+	            {
+                    case "usermsg":  
+                        rtbxMessageWindow.AppendText(message.time + " ");
+                        rtbxMessageWindow.AppendText(message.name);
+                        rtbxMessageWindow.AppendText(": " + message.message + "\n");
+                        rtbxMessageWindow.ScrollToEnd();
+                        break;
+                    case "system":
+                        rtbxMessageWindow.AppendText(message.message);
+                        break;
+		            default:
+                    break;
+	            }
+
+
+
                 // TODO: check if message attributes are empty
-                rtbxMessageWindow.AppendText(message.time + " ");
-                rtbxMessageWindow.AppendText(message.name);
-                rtbxMessageWindow.AppendText(": " + message.message + "\n");
-                rtbxMessageWindow.ScrollToEnd();
+                if (message.time != "" || message.name != "")
+                {
+                    rtbxMessageWindow.AppendText(message.time + " ");
+                    rtbxMessageWindow.AppendText(message.name);
+                    rtbxMessageWindow.AppendText(": " + message.message + "\n");
+                    rtbxMessageWindow.ScrollToEnd();
+                }
             }));
         }
 
