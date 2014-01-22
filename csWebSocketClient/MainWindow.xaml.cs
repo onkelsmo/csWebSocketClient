@@ -25,10 +25,27 @@ namespace csWebSocketClient
         private Connect connect;
         private WebSocket ws;
         private bool isConnected = false;
-
+        private string[] colorArray = new string[] { "007AFF", "FF7000", "FF7000", "15E25F", "CFC700", "CFC700", "CF1100", "CF00BE", "F00" };
+        
+        
+        private Dictionary<string, Brush> colorDic = new Dictionary<string,Brush>();
+        
         public MainWindow()
         {
             InitializeComponent();
+
+            this.colorArray = this.colorArray.Distinct().ToArray();
+
+            foreach (string item in colorArray)
+            {
+                string extendedItem = "#" + item;
+                BrushConverter converter = new BrushConverter();
+                Brush brush = (Brush)converter.ConvertFromString(extendedItem);
+
+                this.colorDic.Add(item, brush);   
+            }
+
+            
         }
 
         private void tbx_selectAll(object sender, EventArgs e)
@@ -73,29 +90,28 @@ namespace csWebSocketClient
 
                 switch (message.type)
 	            {
-                    case "usermsg":  
-                        rtbxMessageWindow.AppendText(message.time + " ");
-                        rtbxMessageWindow.AppendText(message.name);
-                        rtbxMessageWindow.AppendText(": " + message.message + "\n");
+                    case "usermsg":
+                        TextRange trTime = new TextRange(rtbxMessageWindow.Document.ContentEnd, rtbxMessageWindow.Document.ContentEnd);
+                        trTime.Text = message.time + " ";
+                        trTime.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
+
+                        TextRange trName = new TextRange(rtbxMessageWindow.Document.ContentEnd, rtbxMessageWindow.Document.ContentEnd);
+                        trName.Text = message.name;
+                        trName.ApplyPropertyValue(TextElement.ForegroundProperty, this.colorDic[message.color]);
+                        
+                        TextRange trMessage = new TextRange(rtbxMessageWindow.Document.ContentEnd, rtbxMessageWindow.Document.ContentEnd);
+                        trMessage.Text = ": " + message.message + "\n";
+                        trMessage.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
+
                         rtbxMessageWindow.ScrollToEnd();
                         break;
                     case "system":
-                        rtbxMessageWindow.AppendText(message.message);
+                        rtbxMessageWindow.AppendText(message.message + "\n");
+                        rtbxMessageWindow.ScrollToEnd();
                         break;
 		            default:
                     break;
 	            }
-
-
-
-                // TODO: check if message attributes are empty
-                if (message.time != "" || message.name != "")
-                {
-                    rtbxMessageWindow.AppendText(message.time + " ");
-                    rtbxMessageWindow.AppendText(message.name);
-                    rtbxMessageWindow.AppendText(": " + message.message + "\n");
-                    rtbxMessageWindow.ScrollToEnd();
-                }
             }));
         }
 
@@ -159,16 +175,15 @@ namespace csWebSocketClient
                 // 'type', 'message', 'time', 'name', color', 'clients'
                 DateTime time = DateTime.Now;
                 Message message = new Message();
-                string[] colorArray = new string[] {"007AFF", "FF7000", "FF7000", "15E25F", "CFC700", "CFC700", "CF1100", "CF00BE", "F00"};
 
                 Random r = new Random();
-                int id = r.Next(0, colorArray.Length);
+                int id = r.Next(0, this.colorArray.Length);
 
                 message.type = "usermsg";
                 message.message = tbxMessage.Text;
                 message.time = time.ToLongTimeString();
                 message.name = tbxName.Text;
-                message.color = colorArray[id];
+                message.color = this.colorArray[id];
                                 
                 string jsonString = SimpleJson.SimpleJson.SerializeObject(message);
 
