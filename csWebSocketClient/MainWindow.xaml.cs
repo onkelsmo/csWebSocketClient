@@ -26,7 +26,8 @@ namespace csWebSocketClient
         private WebSocket ws;
         private bool isConnected = false;
         private string[] colorArray = new string[] { "007AFF", "FF7000", "FF7000", "15E25F", "CFC700", "CFC700", "CF1100", "CF00BE", "F00" };
-        
+        private Random r = new Random();
+        private int id = 0;
         
         private Dictionary<string, Brush> colorDic = new Dictionary<string,Brush>();
         
@@ -45,7 +46,7 @@ namespace csWebSocketClient
                 this.colorDic.Add(item, brush);   
             }
 
-            
+            this.id = this.r.Next(0, this.colorArray.Length);
         }
 
         private void tbx_selectAll(object sender, EventArgs e)
@@ -183,14 +184,11 @@ namespace csWebSocketClient
                 DateTime time = DateTime.Now;
                 Message message = new Message();
 
-                Random r = new Random();
-                int id = r.Next(0, this.colorArray.Length);
-
                 message.type = "usermsg";
                 message.message = tbxMessage.Text;
                 message.time = time.ToLongTimeString();
                 message.name = tbxName.Text;
-                message.color = this.colorArray[id];
+                message.color = this.colorArray[this.id];
                                 
                 string jsonString = SimpleJson.SimpleJson.SerializeObject(message);
 
