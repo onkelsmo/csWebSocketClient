@@ -96,8 +96,15 @@ namespace csWebSocketClient
                         trTime.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
 
                         TextRange trName = new TextRange(rtbxMessageWindow.Document.ContentEnd, rtbxMessageWindow.Document.ContentEnd);
-                        trName.Text = message.name;
-                        trName.ApplyPropertyValue(TextElement.ForegroundProperty, this.colorDic[message.color]);
+                        if (message.name == null)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            trName.Text = message.name;
+                            trName.ApplyPropertyValue(TextElement.ForegroundProperty, this.colorDic[message.color]);
+                        }
                         
                         TextRange trMessage = new TextRange(rtbxMessageWindow.Document.ContentEnd, rtbxMessageWindow.Document.ContentEnd);
                         trMessage.Text = ": " + message.message + "\n";
@@ -212,6 +219,16 @@ namespace csWebSocketClient
             if (e.Key == Key.Return)
             {
                 this.connectToHost();
+            }
+        }
+
+        private void tbxMessage_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                TextBox tbx = (TextBox)sender;
+                tbx.SelectAll();
+                tbx.Foreground = Brushes.Black;
             }
         }
     }
