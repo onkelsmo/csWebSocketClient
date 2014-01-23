@@ -78,7 +78,11 @@ namespace csWebSocketClient
         {
             this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
             {
-                rtbxMessageWindow.AppendText("[Connection established]\r\n");
+                TextRange trOpened = new TextRange(rtbxMessageWindow.Document.ContentEnd, rtbxMessageWindow.Document.ContentEnd);
+                trOpened.Text = "[Connection established]\r\n";
+                trOpened.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
+                trOpened.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
+
                 this.isConnected = true;
             }));
         }
