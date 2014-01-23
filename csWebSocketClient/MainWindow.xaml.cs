@@ -78,7 +78,7 @@ namespace csWebSocketClient
         {
             this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
             {
-                rtbxMessageWindow.AppendText("[Connection established]\n");
+                rtbxMessageWindow.AppendText("[Connection established]\r\n");
                 this.isConnected = true;
             }));
         }
@@ -95,6 +95,7 @@ namespace csWebSocketClient
                         TextRange trTime = new TextRange(rtbxMessageWindow.Document.ContentEnd, rtbxMessageWindow.Document.ContentEnd);
                         trTime.Text = message.time + " ";
                         trTime.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
+                        trTime.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
 
                         TextRange trName = new TextRange(rtbxMessageWindow.Document.ContentEnd, rtbxMessageWindow.Document.ContentEnd);
                         if (message.name == null)
@@ -105,16 +106,23 @@ namespace csWebSocketClient
                         {
                             trName.Text = message.name;
                             trName.ApplyPropertyValue(TextElement.ForegroundProperty, this.colorDic[message.color]);
+                            trName.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
                         }
                         
                         TextRange trMessage = new TextRange(rtbxMessageWindow.Document.ContentEnd, rtbxMessageWindow.Document.ContentEnd);
-                        trMessage.Text = ": " + message.message + "\n";
+                        trMessage.Text = ": " + message.message + "\r\n";
                         trMessage.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
+                        trMessage.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
 
                         rtbxMessageWindow.ScrollToEnd();
                         break;
                     case "system":
-                        rtbxMessageWindow.AppendText(message.message + "\n");
+                        TextRange trSystem = new TextRange(rtbxMessageWindow.Document.ContentEnd, rtbxMessageWindow.Document.ContentEnd);
+                        trSystem.Text = (message.message + "\r\n");
+                        trSystem.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
+                        trSystem.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
+
+                        //rtbxMessageWindow.AppendText(message.message + "\n");
                         rtbxMessageWindow.ScrollToEnd();
                         break;
 		            default:
@@ -127,7 +135,7 @@ namespace csWebSocketClient
         {
             this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
             {
-                rtbxMessageWindow.AppendText("[Connection closed]\n");
+                rtbxMessageWindow.AppendText("[Connection closed]\r\n");
             }));
         }
 
@@ -135,7 +143,7 @@ namespace csWebSocketClient
         {
             this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
             {
-                rtbxMessageWindow.AppendText("[Error]: " + e.Exception.Message + "\n");
+                rtbxMessageWindow.AppendText("[Error]: " + e.Exception.Message + "\r\n");
             }));
         }
 
@@ -153,8 +161,8 @@ namespace csWebSocketClient
             }
             catch (Exception ex)
             {
-                rtbxMessageWindow.AppendText("[Error]: \n");
-                rtbxMessageWindow.AppendText(ex.Message + "\n");
+                rtbxMessageWindow.AppendText("[Error]: \r\n");
+                rtbxMessageWindow.AppendText(ex.Message + "\r\n");
             }
         }
 
