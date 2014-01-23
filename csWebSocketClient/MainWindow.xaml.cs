@@ -135,7 +135,10 @@ namespace csWebSocketClient
         {
             this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
             {
-                rtbxMessageWindow.AppendText("[Connection closed]\r\n");
+                TextRange trClosed = new TextRange(rtbxMessageWindow.Document.ContentEnd, rtbxMessageWindow.Document.ContentEnd);
+                trClosed.Text = ("[Connection closed]\r\n");
+                trClosed.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
+                trClosed.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
             }));
         }
 
@@ -143,7 +146,10 @@ namespace csWebSocketClient
         {
             this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
             {
-                rtbxMessageWindow.AppendText("[Error]: " + e.Exception.Message + "\r\n");
+                TextRange trError = new TextRange(rtbxMessageWindow.Document.ContentEnd, rtbxMessageWindow.Document.ContentEnd);
+                trError.Text = ("[Error]: " + e.Exception.Message + "\r\n");
+                trError.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
+                trError.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
             }));
         }
 
